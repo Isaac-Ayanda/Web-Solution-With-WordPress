@@ -72,6 +72,7 @@ using lvcreate command. Files for the website will be stored in apps-lv and logs
 12. Verify the entire setup.
 - Run `sudo vgdisplay -v #view complete setup - VG, PV, and LV`
 - Run `sudo lsblk`
+
 ![verify setup](./images/verify-setup1.jpg)
 ![verify setup](./images/verify-setup2.jpg)
 ![verify setup](./images/verify-setup3.jpg)
@@ -81,30 +82,35 @@ using lvcreate command. Files for the website will be stored in apps-lv and logs
 13. Format the logical volumes with ext4 filesystem using mkfs.ext4.
 - Run `sudo mkfs -t ext4 /dev/webdata-vg/apps-lv`
 - Run `sudo mkfs -t ext4 /dev/webdata-vg/logs-lv`
+
 ![format logical volumes](./images/file-system-4-apps.jpg)
 ![format logical volumes](./images/file-system-4-logs.jpg)
 
 14. Create /var/www/html directory to store website files and create /home/recovery/logs to store backup of log data.
 - Run `sudo mkdir -p /var/www/html`
 - Run `sudo mkdir -p /home/recovery/logs`
+
 ![create html directory](./images/html-dir.jpg)
 ![create logs directory](./images/logs-dir.jpg)
 
 15. Mount  apps-lv logical volume on /var/www/html. Use rsync utlility to backup all the files in the log directory /var/log into /home/recovery/logs (this is required before mounting the file system).
 - Run `sudo mount /dev/webdata-vg/apps-lv /var/www/html`
 - Run `sudo rsync -av /var/log/. /home/recovery/logs/`
+
 ![Mount apps-lv](./images/mount-apps.jpg)
 ![backup logs](./images/backup-logs.jpg)
 
 16. Mount logs-lv logival volume on /var/log (This implies that all the existing data on /var/log will be deleted). Then restore log files back into /var/log directory.
 - Run `sudo mount /dev/webdata-vg/logs-lv /var/log`
 - Run `sudo rsync -av /home/recovery/logs/. /var/log`
+
 ![Mount logs](./images/mount-logs.jpg)
 ![restore logs](./images/restore-logs.jpg)
 
 17. Get the UUID of the device that will be used to update the /etc/fstab file so that the mount configuration will persist after restart of the server. Then update /etc/fstab in the right format with the obtained UUID.
 - Run `sudo blkid`
 - Run `sudo vi /etc/fstab`
+
 ![Get UUID](./images/get-block-id.jpg)
 ![UUID update](./images/uuid-update.jpg)
 
@@ -183,6 +189,7 @@ using lvcreate command. Files for the database will be stored in db-lv and logs-
 12. Verify the entire setup.
 - Run `sudo vgdisplay -v #view complete setup - VG, PV, and LV`
 - Run `sudo lsblk`
+
 ![verify setup](./images/dverify-setup1.jpg)
 ![verify setup](./images/dverify-setup2.jpg)
 ![verify setup](./images/dverify-setup3.jpg)
@@ -196,24 +203,28 @@ using lvcreate command. Files for the database will be stored in db-lv and logs-
 14. Create /db directory to store database files and create /home/recovery/logs to store backup of log data.
 - Run `sudo mkdir -p /db`
 - Run `sudo mkdir -p /home/recovery/logs`
+
 ![create db directory](./images/db-dir.jpg)
 
 
 15. Mount  db-lv logical volume on /db. Use rsync utlility to backup all the files in the log directory /var/log into /home/recovery/logs (this is required before mounting the file system).
 - Run `sudo mount /dev/databse-vg/db-lv /db`
 - Run `sudo rsync -av /var/log/. /home/recovery/logs/`
+
 ![Mount db-lv](./images/mount-db.jpg)
 ![backup logs](./images/backup-logs2.jpg)
 
 16. Mount logs-lv logival volume on /var/log (This implies that all the existing data on /var/log will be deleted). Then restore log files back into /var/log directory.
 - Run `sudo mount /dev/database-vg/logs-lv /var/log`
 - Run `sudo rsync -av /home/recovery/logs/. /var/log`
+
 ![Mount logs](./images/mount-logs2.jpg)
 ![restore logs](./images/restore-logs2.jpg)
 
 17. Get the UUID of the device that will be used to update the /etc/fstab file so that the mount configuration will persist after restart of the server. Then update /etc/fstab in the right format with the obtained UUID.
 - Run `sudo blkid`
 - Run `sudo vi /etc/fstab`
+
 ![Get UUID](./images/get-block-id2.jpg)
 ![UUID update](./images/uuid-update2.jpg)
 
@@ -289,17 +300,20 @@ Fifth Step: Configure DB to work with WordPress
 - `FLUSH PRIVILEGES;`
 - `SHOW DATABASES;`
 - `exit`
+
 ![configure db for wordpress](./images/create-wordpress-db.jpg)
 ![configure db for wordpress](./images/create-wordpress-db2.jpg)
 
 Sixth Step: Configure WordPress to connect to remote database.
 1. Open mysql on port 3306 on DB Server EC2 in the inbound rule and allow only connection from webserver's IP address and specify source as /32 for extra security.
+
 ![set inbound rule](./images/set-inbound-rule.jpg)
 
 2. From the terminal of webserver, install mysql client and test that you can connect from the webserver to your DB server by using mysql-client. Then  verify that the list of exisitng databases are accessible.
 - Run `sudo yum install mysql`
 - Run `sudo mysql -u myuser -p -h <DB-Server-Private-IP-address>`
 - Run `SHOW DATABASES;` 
+
 ![install mysql-client](./images/install-mysql-client.jpg)
 ![access dbserver from webserver](./images/access-dbserver-webserver.jpg)
 
