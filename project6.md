@@ -275,8 +275,8 @@ Third Step: Install WordPress on your webserver EC2 instance
 ![download wordpress](./images/download-wordpress2.jpg)
 
 5. Configure SELinux Policies.
-- Run `sudo chown -R apache:apache /var/www/html/wordpress`
-- Run `sudo chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R`
+- Run `sudo chown -R apache:apache /var/www/html/`
+- Run `sudo chcon -t httpd_sys_rw_content_t /var/www/html/ -R`
 - Run `sudo setsebool -P httpd_can_network_connect=1`
 
 ![download wordpress](./images/config-selinux-policies.jpg)
@@ -327,7 +327,8 @@ Sixth Step: Configure WordPress to connect to remote database.
 
 5. Try to access from your browser the link to your WordPress.
 
-- Access from the browser `http://<Web-Server-Public-IP-Address>/wordpress/`
+- Access from the browser `http://<Web-Server-Public-IP-Address>`
+
 ![access dbserver from webserver](./images/wordpress.jpg)
 
   
